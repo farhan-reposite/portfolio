@@ -1782,7 +1782,7 @@
       </section>
 
       <!-- ════════════════ SKILLS ════════════════ -->
-      <section class="section" id="skills" aria-label="Skills">
+      <section class="section tall" id="skills" aria-label="Skills">
         <div class="wrap">
           <span class="eyebrow reveal">Skills</span>
           <h2 class="title reveal">Two stacks, one engineer.</h2>
@@ -2739,9 +2739,9 @@
           })();
         }
 
-        /* ── section snap scrolling ── */
+        /* ── section snap scrolling (desktop only — mobile scrolls natively) ── */
         (function () {
-          if (reduce) return;
+          if (reduce || !fine) return;
           const sections = [
             document.querySelector(".hero"),
             ...["about", "skills", "work", "experience", "contact"].map((id) =>
