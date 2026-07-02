@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Muhammad Farhan Binashrillah — Software Engineer</title>
+  <meta name="description" content="Software engineer in Gresik building manufacturing digitalization tools — systems that survive real production lines.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Serif:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    /* ============================================================
+       DESIGN TOKENS — "the diff ledger"
+       Prose in serif, structure in mono, a persistent gutter down
+       the left like an editor's line-number column.
+       ============================================================ */
+    :root {
+      --paper:    #F6F7F5;
+      --ink:      #191C1A;
+      --graphite: #5B6360;
+      --rule:     #D8DDD8;
+      --add:      #1E6B45;
+      --del:      #9A3B33;
+
+      --mono:  "IBM Plex Mono", ui-monospace, monospace;
+      --serif: "IBM Plex Serif", Georgia, serif;
+
+      --gutter: 76px;
+      --measure: 66ch;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html { scroll-behavior: auto; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        transition: none !important;
+        animation: none !important;
+      }
+    }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--serif);
+      font-size: 1.0625rem;
+      line-height: 1.65;
+      padding-left: var(--gutter);
+      position: relative;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; bottom: 0;
+      left: var(--gutter);
+      width: 1px;
+      background: var(--rule);
+    }
+
+    ::selection { background: var(--add); color: var(--paper); }
+
+    a {
+      color: var(--ink);
+      text-decoration: underline;
+      text-decoration-color: var(--rule);
+      text-underline-offset: 3px;
+      transition: text-decoration-color 120ms ease, color 120ms ease;
+    }
+    a:hover { text-decoration-color: var(--add); color: var(--add); }
+    :focus-visible {
+      outline: 2px solid var(--add);
+      outline-offset: 2px;
+      border-radius: 0;
+    }
+
+    main, header, footer {
+      max-width: var(--measure);
+      padding-inline: 2.25rem 1.5rem;
+    }
+
+    section {
+      margin-block: 5.5rem;
+      position: relative;
+      opacity: 0.4;
+      transition: opacity 400ms ease;
+    }
+    section.in-view { opacity: 1; }
+
+    /* ================= GUTTER MARKERS ================= */
+    h2::before {
+      content: "+";
+      position: absolute;
+      left: calc(-1 * var(--gutter) - 2.25rem);
+      width: var(--gutter);
+      text-align: center;
+      font-family: var(--mono);
+      font-weight: 500;
+      color: var(--rule);
+      transition: color 200ms ease;
+    }
+    section.in-view h2::before { color: var(--add); }
+
+    h2 {
+      font-family: var(--mono);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--graphite);
+      margin: 0 0 1.75rem;
+    }
+
+    /* ================= HEADER / NAV ================= */
+    header {
+      padding-block: 1.1rem;
+      border-bottom: 1px solid var(--rule);
+      max-width: none;
+    }
+    nav ul {
+      list-style: none;
+      margin: 0; padding: 0;
+      display: flex;
+      gap: 1.75rem;
+      font-family: var(--mono);
+      font-size: 0.8125rem;
+    }
+    nav a { text-decoration: none; color: var(--graphite); }
+    nav a:hover { color: var(--add); }
+    nav a::before { content: "./"; color: var(--rule); }
+    nav a.current { color: var(--add); }
+    nav a.current::after { content: "*"; }
+
+    /* ================= HERO ================= */
+    #hero { margin-top: 5rem; }
+    .meta-line {
+      font-family: var(--mono);
+      font-size: 0.8125rem;
+      color: var(--graphite);
+      margin: 0 0 1.25rem;
+    }
+    .meta-line b { font-weight: 500; color: var(--add); }
+    #hero h1 {
+      font-family: var(--mono);
+      font-weight: 600;
+      /* sized down from v3 so the full name sets comfortably */
+      font-size: clamp(1.9rem, 4.6vw, 2.9rem);
+      letter-spacing: -0.03em;
+      line-height: 1.12;
+      margin: 0 0 1.5rem;
+      text-wrap: balance;
+    }
+    .tagline {
+      font-size: 1.25rem;
+      line-height: 1.55;
+      max-width: 46ch;
+      margin: 0 0 2rem;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 1.5rem;
+      font-family: var(--mono);
+      font-size: 0.875rem;
+      margin: 0;
+    }
+    .hero-actions a { text-decoration: none; color: var(--add); }
+    .hero-actions a::before { content: "["; color: var(--graphite); }
+    .hero-actions a::after  { content: "]"; color: var(--graphite); }
+    .hero-actions a:hover { color: var(--ink); }
+
+    /* ================= ABOUT ================= */
+    #about p { margin: 0 0 1.1rem; max-width: 60ch; }
+    #about p:last-child { margin-bottom: 0; }
+
+    /* ================= PROJECTS ================= */
+    .project {
+      padding-block: 2rem;
+      border-top: 1px solid var(--rule);
+      opacity: 0.4;
+      transition: opacity 400ms ease;
+    }
+    .project.in-focus { opacity: 1; }
+    .project:last-of-type { border-bottom: 1px solid var(--rule); }
+    .project[hidden] { display: none; }
+
+    .commit-line {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--graphite);
+      margin: 0 0 0.5rem;
+    }
+    .commit-line .hash { color: var(--add); font-weight: 500; }
+
+    .project h3 {
+      font-family: var(--mono);
+      font-size: 1.0625rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin: 0 0 0.6rem;
+    }
+    .project p { margin: 0 0 1rem; max-width: 58ch; }
+
+    .tech-stack {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 1rem;
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .tech-stack button {
+      font-family: var(--mono);
+      font-size: 0.6875rem;
+      letter-spacing: 0.04em;
+      color: var(--graphite);
+      background: none;
+      border: 1px solid var(--rule);
+      padding: 0.15rem 0.5rem;
+      border-radius: 0;
+      cursor: pointer;
+      transition: transform 90ms ease, border-color 120ms ease,
+                  color 120ms ease, box-shadow 90ms ease;
+    }
+    .tech-stack button:hover {
+      transform: translateY(-1px);
+      border-color: var(--graphite);
+      color: var(--ink);
+      box-shadow: 0 1px 0 var(--rule);
+    }
+    .tech-stack button:active {
+      transform: translateY(1px);
+      box-shadow: none;
+    }
+    .tech-stack button[aria-pressed="true"] {
+      border-color: var(--add);
+      color: var(--add);
+    }
+
+    .filter-status {
+      font-family: var(--mono);
+      font-size: 0.8125rem;
+      color: var(--graphite);
+      margin: 0 0 1.5rem;
+    }
+    .filter-status .cmd { color: var(--ink); }
+    .filter-status .cmd::before { content: "$ "; color: var(--add); }
+    .filter-status button {
+      font: inherit;
+      color: var(--graphite);
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      transition: color 120ms ease;
+    }
+    .filter-status button:hover { color: var(--del); }
+
+    .project-links {
+      display: flex;
+      gap: 1.25rem;
+      margin: 0;
+      font-family: var(--mono);
+      font-size: 0.8125rem;
+    }
+    .project-links a { text-decoration: none; color: var(--graphite); }
+    .project-links a::before { content: "["; color: var(--rule); }
+    .project-links a::after  { content: "]"; color: var(--rule); }
+    .project-links a::before,
+    .project-links a::after,
+    .hero-actions a::before,
+    .hero-actions a::after {
+      display: inline-block;
+      transition: transform 120ms ease, color 120ms ease;
+    }
+    .project-links a:hover { color: var(--add); }
+    .project-links a:hover::before,
+    .project-links a:hover::after { color: var(--add); }
+    .project-links a:hover::before,
+    .hero-actions a:hover::before { transform: translateX(2px); }
+    .project-links a:hover::after,
+    .hero-actions a:hover::after  { transform: translateX(-2px); }
+
+    .private-note {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--graphite);
+      margin: 0;
+    }
+
+    /* ================= PROJECT IMAGE STAGE ================= */
+    .image-stage {
+      display: none;
+      position: fixed;
+      top: 0; right: 0;
+      width: 42vw;
+      height: 100vh;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 320ms ease;
+    }
+    @media (min-width: 1100px) {
+      .image-stage { display: flex; }
+    }
+    .image-stage.active { opacity: 1; pointer-events: auto; }
+
+    .stage-frame { width: 100%; max-width: 460px; }
+    .stage-caption {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--graphite);
+      margin: 0 0 0.6rem;
+    }
+    .stage-img-btn {
+      display: block;
+      width: 100%;
+      padding: 0;
+      border: 1px solid var(--rule);
+      background: var(--paper);
+      cursor: zoom-in;
+    }
+    .stage-img-btn img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 3 / 2;
+      object-fit: cover;
+      opacity: 1;
+      transition: opacity 320ms ease;
+    }
+    .stage-img-btn img.fading { opacity: 0; }
+    .load-bar {
+      height: 3px;
+      width: 100%;
+      background: var(--rule);
+      overflow: hidden;
+      margin-top: 0.6rem;
+    }
+    .load-bar-fill { height: 100%; width: 0%; background: var(--add); }
+
+    /* ================= LIGHTBOX ================= */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(25, 28, 26, 0.94);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+    }
+    .lightbox[hidden] { display: none; }
+    .lightbox img {
+      max-width: 90vw;
+      max-height: 85vh;
+      cursor: zoom-in;
+      transition: transform 260ms ease;
+    }
+    .lightbox img.zoomed { cursor: zoom-out; transform: scale(2.1); }
+    .lightbox-close {
+      position: fixed;
+      top: 1.5rem; right: 1.75rem;
+      font-family: var(--mono);
+      font-size: 0.8125rem;
+      letter-spacing: 0.04em;
+      color: var(--paper);
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+    .lightbox-close:hover { color: var(--add); }
+
+    /* ================= SKILLS ================= */
+    .skills-groups {
+      margin: 0;
+      display: grid;
+      grid-template-columns: max-content 1fr;
+      column-gap: 2.5rem;
+      row-gap: 1.1rem;
+      align-items: baseline;
+    }
+    .skills-groups dt {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--graphite);
+    }
+    .skills-groups dd { margin: 0; max-width: 52ch; }
+
+    /* ================= CONTACT ================= */
+    #contact p { max-width: 56ch; margin: 0 0 1.25rem; }
+    .contact-links {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      font-family: var(--mono);
+      font-size: 0.875rem;
+    }
+    .contact-links a { text-decoration: none; color: var(--add); }
+    .contact-links a:hover { color: var(--ink); }
+
+    /* ================= FOOTER ================= */
+    footer {
+      border-top: 1px solid var(--rule);
+      margin-top: 5rem;
+      padding-block: 1.5rem 2.5rem;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--graphite);
+    }
+    footer p { margin: 0.3rem 0; }
+    .removed {
+      color: var(--del);
+      text-decoration: line-through;
+      text-decoration-thickness: 1px;
+    }
+    .removed::before { content: "- "; }
+    .kept::before { content: "+ "; color: var(--add); }
+
+    /* ================= RESPONSIVE ================= */
+    @media (max-width: 640px) {
+      :root { --gutter: 0px; }
+      body { padding-left: 0; }
+      body::before { display: none; }
+      main, header, footer { padding-inline: 1.25rem; }
+      h2::before {
+        position: static;
+        width: auto;
+        margin-right: 0.6rem;
+      }
+      section { margin-block: 4rem; }
+      .skills-groups { grid-template-columns: 1fr; row-gap: 0.35rem; }
+      .skills-groups dd { margin-bottom: 0.9rem; }
+    }
+  </style>
+</head>
+<body>
+<!-- psst — the console has something for you. -->
+
+  <!-- ================= HEADER / NAV ================= -->
+  <header>
+    <nav aria-label="Primary">
+      <ul>
+        <li><a href="#about">about</a></li>
+        <li><a href="#projects">projects</a></li>
+        <li><a href="#skills">skills</a></li>
+        <li><a href="#contact">contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- ================= HERO ================= -->
+    <section id="hero" aria-labelledby="hero-heading">
+      <p class="meta-line">~/farhan · <b>main</b> · software engineer · Gresik, id</p>
+      <h1 id="hero-heading">Muhammad Farhan Binashrillah</h1>
+      <p class="tagline">
+        I build manufacturing digitalization tools — systems that survive
+        real production lines, real operators, and real deadlines. I speak
+        both code and the factory floor.
+      </p>
+      <p class="hero-actions">
+        <a href="#projects">see my work</a>
+        <a href="#contact">get in touch</a>
+      </p>
+    </section>
+
+    <!-- ================= ABOUT ================= -->
+    <section id="about" aria-labelledby="about-heading">
+      <h2 id="about-heading">About</h2>
+      <p>
+        I'm a software engineer at PT. Sungwoo Indonesia, an automotive
+        seat-belt manufacturer, where I digitalize the shop floor: material
+        receiving, production scheduling, stock tracking, and the KPI
+        dashboards that keep improvement honest. My tools run every shift,
+        used by operators and planners who only care how it works when the line is moving.
+      </p>
+      <p>
+        That's the constraint I design for. A scanner that fails once at
+        the receiving dock loses trust faster than any feature can win it
+        back, so I care about whether something holds up under
+        pressure.
+      </p>
+      <p>
+        Outside of work I run trails around East Java, and build side projects — usually the kind
+        my household actually uses.
+      </p>
+    </section>
+
+    <!-- ================= PROJECTS ================= -->
+    <section id="projects" aria-labelledby="projects-heading">
+      <h2 id="projects-heading">Projects</h2>
+
+      <p class="filter-status" id="filter-status" hidden aria-live="polite">
+        <span class="cmd" id="filter-cmd"></span>
+        <span id="filter-count"></span> ·
+        <button type="button" id="filter-clear">[clear]</button>
+      </p>
+
+      <article class="project" data-tech="php javascript chartjs mysql" data-slug="mrs" data-images="images/mrs/1.png, images/mrs/2.png, images/mrs/3.png">
+        <p class="commit-line"><span class="hash">a41f2c3</span> · in production · PT. Sungwoo Indonesia</p>
+        <h3>Material Receiving System (MRS)</h3>
+        <p>
+          Flagship shop-floor system for incoming material. Boxes are
+          scanned by QR at the dock, verified against orders, and tracked
+          into stock — with KPI dashboards, countermeasure roadmaps, and a
+          PDCA/5W2H improvement cycle built around the data. Replaced paper
+          checklists and end-of-day guesswork.
+        </p>
+        <ul class="tech-stack" aria-label="Technologies used — click to filter">
+          <li><button type="button" data-tech="php" aria-pressed="false">PHP</button></li>
+          <li><button type="button" data-tech="javascript" aria-pressed="false">JavaScript</button></li>
+          <li><button type="button" data-tech="chartjs" aria-pressed="false">Chart.js</button></li>
+          <li><button type="button" data-tech="mysql" aria-pressed="false">MySQL</button></li>
+        </ul>
+        <p class="private-note">internal system — happy to walk through it in an interview</p>
+      </article>
+
+      <article class="project" data-tech="php javascript mysql" data-slug="scheduler" data-images="images/scheduler/1.png, images/scheduler/2.png, images/scheduler/3.png">
+        <p class="commit-line"><span class="hash">7c02e9d</span> · in production · runs every shift</p>
+        <h3>Line Scheduler &amp; Stock Tracker</h3>
+        <p>
+          Generates the hourly production schedule for every line and
+          records material quantity transactions as they happen, so stock
+          levels come from actual movement instead of estimates. Planners
+          see what each line runs next hour; the warehouse sees what's
+          really left.
+        </p>
+        <ul class="tech-stack" aria-label="Technologies used — click to filter">
+          <li><button type="button" data-tech="php" aria-pressed="false">PHP</button></li>
+          <li><button type="button" data-tech="javascript" aria-pressed="false">JavaScript</button></li>
+          <li><button type="button" data-tech="mysql" aria-pressed="false">MySQL</button></li>
+        </ul>
+        <p class="private-note">internal system — happy to walk through it in an interview</p>
+      </article>
+
+      <article class="project" data-tech="javascript htmlcss" data-slug="qr-labels" data-images="images/qr-labels/1.png, images/qr-labels/2.png, images/qr-labels/3.png">
+        <p class="commit-line"><span class="hash">e58b1af</span> · internal tool · used daily on the floor</p>
+        <h3>QR Label Generator</h3>
+        <p>
+          Small tool with a big job: batch-generates print-ready QR labels
+          for material boxes, laid out to scan cleanly on the first pass.
+          The kind of utility nobody notices until it's gone.
+        </p>
+        <ul class="tech-stack" aria-label="Technologies used — click to filter">
+          <li><button type="button" data-tech="javascript" aria-pressed="false">JavaScript</button></li>
+          <li><button type="button" data-tech="htmlcss" aria-pressed="false">HTML/CSS print</button></li>
+        </ul>
+        <p class="private-note">internal system — happy to walk through it in an interview</p>
+      </article>
+
+      <article class="project" data-tech="javascript tailwind supabase chartjs" data-slug="household" data-images="images/household/1.png, images/household/2.png, images/household/3.png">
+        <p class="commit-line"><span class="hash">0d94b6c</span> · side project · in daily use at home</p>
+        <h3>Household Management App</h3>
+        <p>
+          Built for two people to actually share: schedules, tasks, and a
+          dashboard view of the week. Vanilla JS front end on Supabase,
+          with a custom SVG icon library and Chart.js overviews. Its
+          toughest user acceptance test lives in my house.
+        </p>
+        <ul class="tech-stack" aria-label="Technologies used — click to filter">
+          <li><button type="button" data-tech="javascript" aria-pressed="false">JavaScript</button></li>
+          <li><button type="button" data-tech="tailwind" aria-pressed="false">Tailwind</button></li>
+          <li><button type="button" data-tech="supabase" aria-pressed="false">Supabase</button></li>
+          <li><button type="button" data-tech="chartjs" aria-pressed="false">Chart.js</button></li>
+        </ul>
+        <p class="project-links">
+          <a href="#" rel="noopener">live</a>
+          <a href="#" rel="noopener">source</a>
+        </p>
+      </article>
+
+      <article class="project" data-tech="javascript supabase chartjs" data-slug="money" data-images="images/money/1.png, images/money/2.png, images/money/3.png">
+        <p class="commit-line"><span class="hash">c17d3a8</span> · side project · every rupiah accounted for</p>
+        <h3>Money Management App</h3>
+        <p>
+          Personal finance tracker: income, spending, and monthly summaries
+          without opening a spreadsheet. Custom Chart.js dashboards with
+          stacked totals, so the month's story is readable at a glance.
+        </p>
+        <ul class="tech-stack" aria-label="Technologies used — click to filter">
+          <li><button type="button" data-tech="javascript" aria-pressed="false">JavaScript</button></li>
+          <li><button type="button" data-tech="supabase" aria-pressed="false">Supabase</button></li>
+          <li><button type="button" data-tech="chartjs" aria-pressed="false">Chart.js</button></li>
+        </ul>
+        <p class="project-links">
+          <a href="#" rel="noopener">live</a>
+          <a href="#" rel="noopener">source</a>
+        </p>
+      </article>
+    </section>
+
+    <!-- ================= SKILLS ================= -->
+    <section id="skills" aria-labelledby="skills-heading">
+      <h2 id="skills-heading">Skills</h2>
+
+      <dl class="skills-groups">
+        <dt>Languages</dt>
+        <dd>JavaScript, PHP, SQL, HTML/CSS</dd>
+
+        <dt>Frontend</dt>
+        <dd>Vanilla JS, Tailwind CSS, Chart.js, SVG dashboards &amp; icon systems</dd>
+
+        <dt>Backend &amp; data</dt>
+        <dd>PHP, MySQL, Supabase, REST APIs</dd>
+
+        <dt>Factory floor</dt>
+        <dd>QR/barcode workflows, KPI dashboards, PDCA &amp; 5W2H-driven
+        process improvement, shop-floor UX</dd>
+      </dl>
+    </section>
+
+    <!-- ================= CONTACT ================= -->
+    <section id="contact" aria-labelledby="contact-heading">
+      <h2 id="contact-heading">Contact</h2>
+      <p>
+        The fastest way to reach me is email. I read everything, and I
+        reply to anything that isn't spam.
+      </p>
+      <ul class="contact-links">
+        <li><a href="mailto:your-email@example.com">your-email@example.com</a></li>
+        <li><a href="#" rel="noopener">github</a></li>
+        <li><a href="#" rel="noopener">linkedin</a></li>
+      </ul>
+    </section>
+
+  </main>
+
+  <!-- ================= PROJECT IMAGE STAGE ================= -->
+  <aside class="image-stage" id="image-stage" aria-hidden="true">
+    <div class="stage-frame">
+      <p class="stage-caption" id="stage-caption"></p>
+      <button type="button" class="stage-img-btn" id="stage-img-btn" aria-label="View screenshot full size">
+        <img id="stage-img" alt="" draggable="false">
+      </button>
+      <div class="load-bar" aria-hidden="true"><div class="load-bar-fill" id="load-bar-fill"></div></div>
+    </div>
+  </aside>
+
+  <!-- ================= LIGHTBOX ================= -->
+  <div class="lightbox" id="lightbox" hidden>
+    <button type="button" class="lightbox-close" id="lightbox-close">[close]</button>
+    <img id="lightbox-img" alt="" draggable="false">
+  </div>
+
+  <!-- ================= FOOTER ================= -->
+  <footer>
+    <p class="removed">© 2026 Muhammad Farhan Binashrillah. Powered by passion and synergy.</p>
+    <p class="kept">© 2026 Muhammad Farhan Binashrillah. Built by hand.</p>
+  </footer>
+
+  <script>
+  (function () {
+    "use strict";
+
+    /* ========== 1. TAG FILTER ========== */
+    var projects = Array.prototype.slice.call(document.querySelectorAll(".project"));
+    var tagButtons = Array.prototype.slice.call(document.querySelectorAll(".tech-stack button"));
+    var status = document.getElementById("filter-status");
+    var statusCmd = document.getElementById("filter-cmd");
+    var statusCount = document.getElementById("filter-count");
+    var clearBtn = document.getElementById("filter-clear");
+    var activeTech = null;
+
+    function applyFilter(tech) {
+      activeTech = tech;
+      var matches = 0;
+
+      projects.forEach(function (p) {
+        var techs = (p.getAttribute("data-tech") || "").split(" ");
+        var show = !tech || techs.indexOf(tech) !== -1;
+        p.hidden = !show;
+        if (show) matches++;
+      });
+
+      tagButtons.forEach(function (b) {
+        b.setAttribute("aria-pressed", String(b.getAttribute("data-tech") === tech));
+      });
+
+      if (tech) {
+        var label = document.querySelector('.tech-stack button[data-tech="' + tech + '"]').textContent;
+        statusCmd.textContent = 'git log --grep="' + label + '"';
+        statusCount.textContent = " · " + matches + (matches === 1 ? " match" : " matches");
+        status.hidden = false;
+      } else {
+        status.hidden = true;
+      }
+    }
+
+    document.getElementById("projects").addEventListener("click", function (e) {
+      var btn = e.target.closest(".tech-stack button");
+      if (!btn) return;
+      var tech = btn.getAttribute("data-tech");
+      applyFilter(tech === activeTech ? null : tech);
+    });
+
+    clearBtn.addEventListener("click", function () { applyFilter(null); });
+
+    /* ========== 2. SNAP SCROLL — centered, eased ========== */
+    (function () {
+      var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (reduceMotion) return;
+
+      var snapEls = Array.prototype.slice.call(
+        document.querySelectorAll("#hero, #about, #skills, #contact, .project, footer")
+      ).sort(function (a, b) {
+        return a.getBoundingClientRect().top - b.getBoundingClientRect().top;
+      });
+
+      var isAnimating = false;
+      var rafId = null;
+
+      function targetFor(el) {
+        var rect = el.getBoundingClientRect();
+        var elCenter = rect.top + window.scrollY + rect.height / 2;
+        var target = elCenter - window.innerHeight / 2;
+        var max = document.documentElement.scrollHeight - window.innerHeight;
+        return Math.max(0, Math.min(max, target));
+      }
+
+      function closestIndex() {
+        var here = window.scrollY + window.innerHeight / 2;
+        var best = 0, bestDist = Infinity;
+        snapEls.forEach(function (el, i) {
+          var rect = el.getBoundingClientRect();
+          var center = rect.top + window.scrollY + rect.height / 2;
+          var dist = Math.abs(center - here);
+          if (dist < bestDist) { bestDist = dist; best = i; }
+        });
+        return best;
+      }
+
+      function easeInOutCubic(t) {
+        return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      }
+
+      function animateTo(target, duration) {
+        if (rafId) cancelAnimationFrame(rafId);
+        var start = window.scrollY;
+        var change = target - start;
+        if (Math.abs(change) < 1) { isAnimating = false; return; }
+        var startTime = null;
+        isAnimating = true;
+
+        function step(ts) {
+          if (!startTime) startTime = ts;
+          var elapsed = ts - startTime;
+          var progress = Math.min(elapsed / duration, 1);
+          window.scrollTo(0, start + change * easeInOutCubic(progress));
+          if (progress < 1) {
+            rafId = requestAnimationFrame(step);
+          } else {
+            isAnimating = false;
+            rafId = null;
+          }
+        }
+        rafId = requestAnimationFrame(step);
+      }
+
+      function goToIndex(i) {
+        i = Math.max(0, Math.min(snapEls.length - 1, i));
+        animateTo(targetFor(snapEls[i]), 700);
+      }
+
+      window.addEventListener("wheel", function (e) {
+        e.preventDefault();
+        if (isAnimating) return;
+        var dir = e.deltaY > 0 ? 1 : -1;
+        goToIndex(closestIndex() + dir);
+      }, { passive: false });
+
+      Array.prototype.slice.call(document.querySelectorAll('a[href^="#"]')).forEach(function (a) {
+        a.addEventListener("click", function (e) {
+          var id = a.getAttribute("href").slice(1);
+          var el = document.getElementById(id);
+          if (!el) return;
+          e.preventDefault();
+          animateTo(targetFor(el), 700);
+          history.pushState(null, "", "#" + id);
+        });
+      });
+    })();
+
+    /* ========== 3. PROJECT IMAGE STAGE ========== */
+    (function () {
+      var stageEl = document.getElementById("image-stage");
+      var caption = document.getElementById("stage-caption");
+      var imgEl = document.getElementById("stage-img");
+      var imgBtn = document.getElementById("stage-img-btn");
+      var barFill = document.getElementById("load-bar-fill");
+      var lightbox = document.getElementById("lightbox");
+      var lightboxImg = document.getElementById("lightbox-img");
+      var lightboxClose = document.getElementById("lightbox-close");
+      var projectEls = Array.prototype.slice.call(document.querySelectorAll(".project"));
+      if (!stageEl || !projectEls.length) return;
+
+      var DURATION = 4200;
+      var state = { project: null, slides: [], index: 0, progress: 0, paused: false };
+      var lastTs = null;
+
+      function placeholderURI(title, hash, idx, total) {
+        var lines = "";
+        for (var i = 0; i < idx + 3; i++) {
+          var y = 420 + i * 22;
+          lines += '<line x1="40" y1="' + y + '" x2="' + (200 + i * 40) + '" y2="' + y + '" stroke="#D8DDD8"/>';
+        }
+        var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="900" height="600" viewBox="0 0 900 600">' +
+          '<rect width="900" height="600" fill="#F6F7F5"/>' +
+          '<rect width="900" height="5" fill="#1E6B45"/>' +
+          '<text x="40" y="70" font-family="IBM Plex Mono, monospace" font-size="14" fill="#5B6360">' + hash + ' &#183; frame ' + idx + '/' + total + '</text>' +
+          '<text x="40" y="230" font-family="IBM Plex Serif, serif" font-size="30" fill="#191C1A">' + title + '</text>' +
+          '<text x="40" y="270" font-family="IBM Plex Mono, monospace" font-size="12" fill="#9AA39D">// screenshot pending</text>' +
+          '<g stroke-width="1">' + lines + '</g>' +
+          '</svg>';
+        return "data:image/svg+xml," + encodeURIComponent(svg);
+      }
+
+      var fadeTimer = null;
+
+      function loadSlide() {
+        var p = state.project;
+        if (!p) return;
+        var idx = state.index;
+        var title = p.querySelector("h3").textContent;
+        var hash = p.querySelector(".hash").textContent;
+        imgEl.dataset.fallback = placeholderURI(title, hash, idx + 1, state.slides.length);
+
+        clearTimeout(fadeTimer);
+        imgEl.classList.add("fading");
+        fadeTimer = window.setTimeout(function () {
+          imgEl.alt = title + " — screenshot " + (idx + 1) + " of " + state.slides.length;
+          caption.textContent = hash + " · " + title + " · " + (idx + 1) + "/" + state.slides.length;
+          imgEl.src = state.slides[idx];
+        }, 260);
+      }
+
+      imgEl.addEventListener("load", function () {
+        imgEl.classList.remove("fading");
+      });
+
+      imgEl.addEventListener("error", function () {
+        if (imgEl.dataset.fallback && imgEl.src !== imgEl.dataset.fallback) {
+          imgEl.src = imgEl.dataset.fallback;
+        }
+      });
+
+      function setActiveProject(p) {
+        if (state.project === p) return;
+        state.project = p;
+        state.slides = (p.getAttribute("data-images") || "")
+          .split(",")
+          .map(function (s) { return s.trim(); })
+          .filter(Boolean);
+        state.index = 0;
+        state.progress = 0;
+        loadSlide();
+      }
+
+      function nextSlide() {
+        if (!state.slides.length) return;
+        state.index = (state.index + 1) % state.slides.length;
+        state.progress = 0;
+        loadSlide();
+      }
+
+      function tick(ts) {
+        if (lastTs === null) lastTs = ts;
+        var dt = ts - lastTs;
+        lastTs = ts;
+        if (!state.paused && state.project && stageEl.classList.contains("active")) {
+          state.progress += dt;
+          barFill.style.width = Math.min(100, (state.progress / DURATION) * 100) + "%";
+          if (state.progress >= DURATION) nextSlide();
+        }
+        requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+
+      stageEl.addEventListener("mouseenter", function () { state.paused = true; });
+      stageEl.addEventListener("mouseleave", function () { state.paused = false; });
+
+      imgBtn.addEventListener("click", function () {
+        lightboxImg.src = imgEl.src;
+        lightboxImg.alt = imgEl.alt;
+        lightboxImg.classList.remove("zoomed");
+        lightbox.hidden = false;
+        state.paused = true;
+      });
+
+      function closeLightbox() {
+        lightbox.hidden = true;
+        lightboxImg.classList.remove("zoomed");
+        state.paused = false;
+      }
+      lightboxClose.addEventListener("click", closeLightbox);
+      lightbox.addEventListener("click", function (e) {
+        if (e.target === lightbox) closeLightbox();
+      });
+      lightboxImg.addEventListener("click", function () {
+        lightboxImg.classList.toggle("zoomed");
+      });
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape" && !lightbox.hidden) closeLightbox();
+      });
+
+      if ("IntersectionObserver" in window) {
+        var ratios = new Map();
+        projectEls.forEach(function (p) { ratios.set(p, 0); });
+
+        function pickBest() {
+          var best = null, bestRatio = 0;
+          ratios.forEach(function (ratio, el) {
+            if (ratio > bestRatio) { bestRatio = ratio; best = el; }
+          });
+          projectEls.forEach(function (p) {
+            p.classList.toggle("in-focus", p === best);
+          });
+          if (best) {
+            stageEl.classList.add("active");
+            stageEl.setAttribute("aria-hidden", "false");
+            setActiveProject(best);
+          } else {
+            stageEl.classList.remove("active");
+            stageEl.setAttribute("aria-hidden", "true");
+          }
+        }
+
+        var focusObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            ratios.set(entry.target, entry.isIntersecting ? entry.intersectionRatio : 0);
+          });
+          pickBest();
+        }, {
+          // only count a project once it's near the vertical center of the
+          // viewport, so mid-scroll transit between two projects doesn't
+          // register both as simultaneously "visible" and flicker between them
+          rootMargin: "-42% 0px -42% 0px",
+          threshold: [0, 0.25, 0.5, 0.75, 1]
+        });
+
+        projectEls.forEach(function (p) { focusObserver.observe(p); });
+      }
+    })();
+
+    /* ========== 4. SCROLL-SPY ========== */
+    var sections = Array.prototype.slice.call(document.querySelectorAll("main section[id]"));
+    var navLinks = Array.prototype.slice.call(document.querySelectorAll("nav a[href^='#']"));
+
+    if ("IntersectionObserver" in window) {
+      var spy = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          sections.forEach(function (s) {
+            s.classList.toggle("in-view", s === entry.target);
+          });
+          navLinks.forEach(function (a) {
+            a.classList.toggle("current", a.getAttribute("href") === "#" + entry.target.id);
+          });
+        });
+      }, { rootMargin: "-40% 0px -50% 0px" });
+
+      sections.forEach(function (s) { spy.observe(s); });
+    }
+
+    /* ========== 5. FOR THE ONES WHO OPEN THE CONSOLE ========== */
+    try {
+      console.log(
+        "%c$ whoami%c\nMuhammad Farhan Binashrillah — I speak both code and the factory floor.\n\n" +
+        "You opened the console. I like you already.\n" +
+        "Try running: %chire()%c",
+        "font-family: monospace; color: #1E6B45; font-weight: bold;",
+        "font-family: monospace; color: inherit;",
+        "font-family: monospace; color: #1E6B45;",
+        "font-family: monospace; color: inherit;"
+      );
+      window.hire = function () {
+        console.log(
+          "%c→ your-email@example.com%c\nSubject line \"found the easter egg\" gets a same-day reply.",
+          "font-family: monospace; color: #1E6B45; font-weight: bold;",
+          "font-family: monospace; color: inherit;"
+        );
+        return "talk soon.";
+      };
+    } catch (e) { /* consoles are optional */ }
+  })();
+  </script>
+
+</body>
+</html>
